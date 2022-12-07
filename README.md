@@ -220,3 +220,231 @@ class RectangleDemoTest {
 > 高层模块不应该依赖底层模块，两者应该依赖其抽象；抽象不应该依赖细节，细节应该抽象。简单地说，就是要对抽象进行编程，不要对实现进行编程，这样就降低了客户与实现模块之间的耦合。
 >
 > 比如组装电脑。只需要，内存，机箱cpu，硬盘，只要这些东西有了，就能运行计算机。但具体的品种可以选择。
+
+```java
+public class XiJieHardDisk {
+
+    public void save(String data) {
+        System.out.println("使用希捷硬盘存储数据为:" + data);
+    }
+
+    public String get(){
+        System.out.println("使用希捷硬盘返回数据");
+        return "数据";
+    }
+}
+
+public class KingstonMemory {
+
+    public void save() {
+        System.out.println("使用金士顿内存条");
+    }
+}
+
+public class InterCpu {
+
+    public void run() {
+
+        System.out.println("使用inter处理器");
+    }
+}
+
+public class Computer {
+
+
+    private XiJieHardDisk hardDisk;
+
+    private InterCpu cpu;
+
+    private KingstonMemory memory;
+
+
+    public XiJieHardDisk getHardDisk() {
+        return hardDisk;
+    }
+
+    public void setHardDisk(XiJieHardDisk hardDisk) {
+        this.hardDisk = hardDisk;
+    }
+
+    public InterCpu getCpu() {
+        return cpu;
+    }
+
+    public void setCpu(InterCpu cpu) {
+        this.cpu = cpu;
+    }
+
+    public KingstonMemory getMemory() {
+        return memory;
+    }
+
+    public void setMemory(KingstonMemory memory) {
+        this.memory = memory;
+    }
+
+
+    public void run() {
+
+        System.out.println("运行计算机");
+
+        String data = hardDisk.get();
+
+        System.out.println("从硬盘上获取的数据是：" + data);
+
+        cpu.run();
+
+        memory.save();
+    }
+}
+
+ public void testTestRun() {
+
+        Computer computer=new Computer();
+
+        XiJieHardDisk hardDisk=new XiJieHardDisk();
+
+        computer.setHardDisk(hardDisk);
+
+        InterCpu cpu=new InterCpu();
+
+        computer.setCpu(cpu);
+
+        KingstonMemory memory=new KingstonMemory();
+
+        computer.setMemory(memory);
+
+        computer.run();
+    }
+```
+
+上面的代码已经组装了一台电脑，但是组装的电脑cpu，内存，硬盘都是固定的，对用户是不友好的，用户需要可以自行挑选喜欢的配件。
+
+根据依赖倒转原则进行改进：只需要修改Computer类，让Computer类依赖抽象，而不是依赖于各个组件具体的实现类
+
+### 接口隔离原则
+
+> 客户端不应该被迫依赖于它不适用的方法。一个类对另一个类的依赖应该建立在最小的接口上。
+
+### 迪米特法则
+
+> 只和你的直接朋友交谈，不跟“陌生人”说话。
+>
+>   其含义是：如果两个软件实体无须直接通信，那么就不应当发生直接的互相调用，可以通过第三方（包含了这两个软件）转发该调用。其目的是降低类之间的耦合度，提高模块的相对独立性。
+>
+>   迪米特法则中的“朋友”是指：当前对象本身、当前对象的成员对象，当前对象创建的对象、当前对象的方法参数等。这些对象同当前对象存在关联、聚合或者组合关系，可以直接访问对象的方法。
+
+```java
+public class Star {
+
+    private String name;
+
+    public Star(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
+
+public class Fans {
+
+    private String name;
+
+    public Fans(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
+
+public class Company {
+
+    private String name;
+
+    public Company(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
+
+public class Agent {
+
+    private Star star;
+
+    private Fans fans;
+
+    private Company company;
+
+    public void setStar(Star star) {
+        this.star = star;
+    }
+
+    public void setFans(Fans fans) {
+        this.fans = fans;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    public void meeting() {
+        System.out.println(fans.getName() + "与明星" + star.getName() + "见面了");
+    }
+
+    public void business() {
+        System.out.println(company.getName() + "与明星" + star.getName() + "洽谈业务");
+    }
+}
+
+public class Client {
+
+    public static void main(String[] args) {
+
+
+        Agent agent = new Agent();
+
+        Star star = new Star("林青霞");
+
+        agent.setStar(star);
+
+        Fans fans = new Fans("小A");
+
+        agent.setFans(fans);
+
+        Company company = new Company("笑果文化");
+        agent.setCompany(company);
+
+        agent.meeting();
+
+        agent.business();
+    }
+}
+```
+
+
+
+### 合成复用原则
+
+> 尽量使用组合或者聚合等关联关系来实现，其次才考虑使用继承关系来实现。
+>
+> 通常类的复用分为继承复用和合成复用两种
+>
+> 继承复用虽然简单和易实现，但是存在以下缺点
+>
+> - 继承复用破坏了类的封装性。因为继承会将父类的实现细节暴露给子类，父类对子类是透明的，所以这种复用又称为”白箱“复用
+> - 子类和父类的耦合度高。父类的实现的任何改变都会导致子类的实现发生变化，不利于类的扩展和维护
+> - 它限制了复用的灵活性。从父类继承而来的实现是静态的，在编译时已经定义，所以在运行时不可能发生变化
+>
+> 采用组合或者聚合复用时，可以将已有对象纳入新对象中，使之成为新对象的一部分，新对象可以调用已有对象的功能。
+>
+> - 维持了类的封装性。因为成分对象的内部细节是新对象看不见的，所以这种复用又称为”黑箱“复用
+> - 对象间的耦合度低。可以在类的成员位置声明抽象
+> - 复用的灵活性高。这种复用可以在运行时动态进行，新对象可以动态地引用与成分对象类型相同的对象
+

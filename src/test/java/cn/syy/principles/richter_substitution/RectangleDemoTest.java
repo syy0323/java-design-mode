@@ -3,11 +3,11 @@ package cn.syy.principles.richter_substitution;
 import cn.syy.principles.richter_substitution.before.Rectangle;
 import cn.syy.principles.richter_substitution.before.RectangleDemo;
 import cn.syy.principles.richter_substitution.before.Square;
-import org.junit.jupiter.api.Test;
+import junit.framework.TestCase;
 
-class RectangleDemoTest {
+class RectangleDemoTest extends TestCase {
 
-    @Test
+
     void print() {
 
         Rectangle rectangle = new Rectangle();

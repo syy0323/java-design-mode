@@ -1,10 +1,10 @@
 package cn.syy.principles.richter_substitution.after;
 
-import org.junit.jupiter.api.Test;
+import cn.syy.AppTest;
+import junit.framework.TestCase;
 
-class RectangleDemoTest {
+class RectangleDemoTest extends TestCase {
 
-    @Test
     void print() {
 
         Rectangle rectangle = new Rectangle();

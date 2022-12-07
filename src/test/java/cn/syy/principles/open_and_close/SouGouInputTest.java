@@ -1,10 +1,10 @@
 package cn.syy.principles.open_and_close;
 
-import org.junit.jupiter.api.Test;
 
-class SouGouInputTest {
+import junit.framework.TestCase;
 
-    @Test
+class SouGouInputTest extends TestCase {
+
     void display() {
 
         // 创建搜狗输入法对象
