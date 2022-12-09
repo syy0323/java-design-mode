@@ -448,3 +448,114 @@ public class Client {
 > - 对象间的耦合度低。可以在类的成员位置声明抽象
 > - 复用的灵活性高。这种复用可以在运行时动态进行，新对象可以动态地引用与成分对象类型相同的对象
 
+
+
+## 创建者模式
+
+> 创建者模式的主要关注点是”怎么创建对象？“，它的主要特点是”将对象的创建与使用分离“
+
+- 单例模式
+- 工厂方法模式
+- 抽象工程模式
+- 原型模式
+- 建造者模式
+
+### 单例设计模式
+
+> 单例模式(Singleton Pattern)是Java中最简单的设计模式之一。这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。
+>
+> 这种模式涉及到一个单一的类，该类负责创建自己的对象，同时确保只有单个对象被创建。这个类提供了一种访问其唯一对象的方式，可以直接访问，不需要实例化该类的对象。
+
+
+
+> 单例模式分为两种
+>
+> - 饿汉式：类加载就会创建该单例实例
+> - 懒汉式：类加载不会创建该单例实例，在首次使用时才会被创建
+
+
+
+饿汉式两种
+
+```java
+/**
+ * 单例模式
+ * <p>
+ * 饿汉式 静态成员变量方式
+ */
+public class Singleton {
+
+    // 构造方法私有化
+    private Singleton() {
+    }
+
+    // 在本类中创建对象
+    private static final Singleton instance = new Singleton();
+
+    // 提供一个公共的获取实例的方法
+    public static Singleton getInstance() {
+
+        return instance;
+    }
+}
+```
+
+```java
+/**
+ * 单例模式
+ * <p>
+ * 饿汉式 静态代码块方式
+ */
+public class Singleton {
+
+    // 构造方法私有化
+    private Singleton() {
+    }
+
+    // 声明Singleton类型的变量
+    private static final Singleton instance;
+
+    // 静态代码块中进行赋值
+    static {
+        instance = new Singleton();
+    }
+
+    // 提供一个公共的获取实例的方法
+    public static Singleton getInstance() {
+
+        return instance;
+    }
+}
+```
+
+懒汉式
+
+```java
+/**
+ * 单例模式
+ * <p>
+ * 懒汉式
+ */
+public class Singleton {
+
+    // 构造方法私有化
+    private Singleton() {
+    }
+
+    // 声明Singleton类型的变量
+    private static Singleton instance;
+
+    // 提供一个公共的获取实例的方法,锁
+    public static synchronized Singleton getInstance() {
+
+        if (instance == null) {
+
+            instance = new Singleton();
+        }
+
+        return instance;
+    }
+}
+```
+
+该方式实现了懒加载效果，同时也解决了线程安全问题。但是在getInstance()方法上添加了synchronized关键字，导致执行效率过低。
